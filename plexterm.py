@@ -12,41 +12,41 @@ args = vars(parser.parse_args())
 server = args['server']
 command = args['command']
 
+def choose (question, tree):
+    for index, item in enumerate(tree):
+        print "%i - %s"%(index, item.get('title'))
+    choice = input(question)
+    return tree[choice]
+
 if command == "tv":
     # sections
     url = server+'/library/sections/'
     sections = ET.fromstring(urllib.urlopen(url).read())
     # NOTE: only use first [@type='show']
     section = sections.find("./Directory[@type='show']").get('key')
-    url = url + section + '/all/'
+
     # shows
+    url = url + section + '/all/'
     shows = ET.fromstring(urllib.urlopen(url).read())
     shows = shows.findall("./Directory")
-    for index, show in enumerate(shows):
-        print "%i - %s"%(index, show.get('title'))
-    choice = 'wrong'
-    choice = input("show number? ")
-    print "### %s"%shows[choice].get("title")
+    show = choose("show number? ", shows)
+    print "### %s"%show.get("title")
+
     # seasons
-    show = shows[choice]
     url = server+show.get("key")
     seasons = ET.fromstring(urllib.urlopen(url).read())
     seasons = seasons.findall("./Directory")
-    for index, season in enumerate(seasons):
-        print  "%i - %s"%(index, season.get('title'))
-    choice = input("season number? ")
-    print "## %s"%seasons[choice].get("title")
+    season = choose("season number? ", seasons)
+    print "### %s"%season.get("title")
+
     # episode
-    season = seasons[choice]
     url = server+season.get("key")
     episodes = ET.fromstring(urllib.urlopen(url).read())
     episodes = episodes.findall("./Video")
-    for index, episode in enumerate(episodes):
-        print  "%i - %s"%(index, episode.get('title'))
-    choice = input("episode number? ")
-    print "# %s"%episodes[choice].get("title")
+    episode = choose("episode number? ", episodes)
+    print "### %s"%episode.get("title")
+
     # stream
-    episode = episodes[choice]
     key = episode.get("key")
 else:
     key = '/library/metadata/'+str(command)
