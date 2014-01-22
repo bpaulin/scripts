@@ -13,9 +13,12 @@ server = args['server']
 command = args['command']
 
 def choose (question, tree):
-    for index, item in enumerate(tree):
-        print "%i - %s"%(index, item.get('title'))
-    choice = input(question)
+    if len(tree) == 1:
+        choice = 0
+    else:
+        for index, item in enumerate(tree):
+            print "%i - %s"%(index, item.get('title'))
+        choice = input(question)
     return tree[choice]
 
 if command == "tv":
