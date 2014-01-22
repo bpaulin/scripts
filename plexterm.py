@@ -64,6 +64,7 @@ else:
     argsvlc = [
         "cvlc",
         "--qt-minimal-view",
+        "--quiet",
         server+video
     ]
     # Subtitle
@@ -84,4 +85,5 @@ else:
                 name)
     argsvlc.append("--video-title="+name)
     # launch vlc
+    print "playing %s"%name
     subprocess.call(argsvlc)
